@@ -2,7 +2,7 @@ from unittest import TestCase
 
 import responses
 
-from xkcd_rest_api_client import XkcdRestApiClient
+from .xkcd_rest_client import XkcdRestClient
 from os.path import exists
 
 DOWNLOAD_LOCATION = "C:\\tmp"
@@ -12,7 +12,7 @@ DOWNLOADED_FILE = DOWNLOAD_LOCATION + "\\standards.png"
 class TestXkcdRestApiClient(TestCase):
 
     def setUp(self):
-        self.client = XkcdRestApiClient("http://xkcd.com", True)
+        self.client = XkcdRestClient(trace=True)
 
     def test_get_meta(self):
         meta = self.client.get_meta(420)

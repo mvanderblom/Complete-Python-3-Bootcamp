@@ -2,8 +2,8 @@ import requests
 import json
 
 
-class XkcdRestApiClient():
-    def __init__(self, base_url, trace=False):
+class XkcdRestClient():
+    def __init__(self, base_url="http://xkcd.com", trace=False):
         self.base_url = base_url
         self.trace = trace
 
