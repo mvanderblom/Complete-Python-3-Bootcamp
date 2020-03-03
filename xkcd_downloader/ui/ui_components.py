@@ -1,7 +1,11 @@
+from abc import ABC, abstractmethod
+
+
 class Page:
-    def __init__(self, prompt, actions=[]):
+    def __init__(self, prompt, actions=[], return_action_label="Quit"):
         self.prompt = prompt
         self.actions = actions
+        self.return_action_label = return_action_label
 
     def show(self):
         user_input = ""
@@ -9,7 +13,7 @@ class Page:
             print(self.prompt)
             for num, action in enumerate(self.actions):
                 print(f"({num + 1}) - {action.prompt}")
-            print("(0) - quit")
+            print("(0) - " + self.return_action_label)
 
             user_input = input()
             if not user_input.isnumeric() or not (0 <= int(user_input) <= len(self.actions)):
@@ -24,25 +28,27 @@ class Page:
         self.actions.append(action)
 
 
-class Action:
+class AbstractAction(ABC):
+    @property
+    @abstractmethod
+    def prompt(self):
+        pass
+
+    @abstractmethod
+    def execute(self):
+        pass
+
+
+class Action(AbstractAction):
     def __init__(self, prompt, handle_answer=None):
-        self.prompt = prompt
+        self._prompt = prompt
         self.handle_answer = handle_answer
 
     def execute(self):
         if self.handle_answer:
             self.handle_answer()
 
+    def __prompt(self):
+        return self._prompt
 
-class Setting:
-    def __init__(self, value):
-        self.value = value
-
-    def __str__(self):
-        return str(self.value)
-
-    def __bool__(self):
-        return bool(self.value)
-
-    def modify(self, prompt):
-        self.value = input(prompt)
+    prompt = property(__prompt)
